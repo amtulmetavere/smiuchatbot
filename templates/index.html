@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smiu SmartTalk</title>
+</head>
+<link href='https://fonts.googleapis.com/css?family=Poppins' rel='stylesheet'>
+<style>
+body{
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    background-color: #0D0D0D;
+    overflow:hidden ;
+    font-family: 'Poppins';
+}
+.mbox{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: -webkit-fill-available;
+}
+
+.hbox{
+    background-color: #1A66FF;
+    width: 100%;
+}
+h1{
+    text-align: center;
+}
+.mmbox{
+    bottom: 0px;
+    position: absolute;
+    background-color: grey;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.cbox{
+ 
+    width: -webkit-fill-available;
+    height: 56.2em;
+    overflow-y: scroll;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.userinput{
+    float: right;
+    clear: both;
+    max-width: 80%;
+    background-color: #1A66FF;
+    color: #FFFFFF;
+    margin: 8px;
+    padding: 8px;
+    border-radius: 5px;
+}
+.assistantreply{
+    float: left;
+    clear: both;
+    max-width: 80%;
+    background-color: #1B1B1B;
+    color: #FFFFFF;
+   
+    margin: 8px;
+    padding: 8px;
+    border-radius: 5px;
+}
+form{
+    border-top: 2px solid transparent;
+    border-image: linear-gradient(to right, transparent 0%, #212121 65%, #212121 70%, transparent 100%) 2;
+    width: 100%;
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    background-color: #0D0D0D;
+}
+#userInput{
+    padding-inline: calc(25% - 20px);
+    padding-block: 1px;
+    border: none;
+    border-radius: 10px;
+    background-color: #212121;
+    margin-inline: 10px;
+    font-size: 16px;
+    color: #FFFFFF;
+}
+::-webkit-scrollbar {
+  width: 20px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #d6dee1;
+  border-radius: 20px;
+  border: 6px solid transparent;
+  background-clip: content-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #a8bbbf;
+}
+button{
+   background-color: #1A66FF ; 
+border-radius: 10px;
+border-color: #FFFFFF;
+}
+.ibox{
+    color: #FFFFFF;
+    text-align: center;
+    font-weight: bold;
+    font-size: larger;
+}
+</style>
+
+<body>
+    <div class="mbox">
+        <div class="hbox">
+            <h1>SMIU SmartTalk</h1>
+        </div>
+        <div class="cbox">
+           
+            <div class="ibox">
+                <img src="https://www.smiu.edu.pk/themes/smiu/images/13254460_710745915734761_8157428650049174152_n.png" alt="" width="90" height="90">
+                <p>How can I help you today?</p>
+            </div>
+
+        </div>
+        <div class="mmbox">
+            <form action="/chat" method="post">
+                <input type="text" id="userInput" name="message" placeholder="Enter Prompt..." required>
+                <button type="submit"><img width="30" height="30" color="white" src="https://img.icons8.com/ios-glyphs/30/000000/filled-sent.png" alt="filled-sent"/></button>
+            </form>
+        </div>
+    </div>
+</body>
+<script>
+     function submitForm(event) {
+         event.preventDefault();
+         }
+</script>
+</html>

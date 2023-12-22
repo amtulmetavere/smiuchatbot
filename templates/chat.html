@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smiu SmartTalk</title>
+</head>
+<link href='https://fonts.googleapis.com/css?family=Poppins' rel='stylesheet'>
+<style>
+body{
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    background-color: #0D0D0D;
+    overflow:hidden ;
+    font-family: 'Poppins';
+}
+.mbox{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: -webkit-fill-available;
+}
+
+.hbox{
+    background-color: #1A66FF;
+    width: 100%;
+}
+h1{
+    text-align: center;
+}
+.mmbox{
+    bottom: 0px;
+    position: absolute;
+    background-color: grey;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.cbox{
+ 
+    width: -webkit-fill-available;
+    height: 56.2em;
+    overflow-y: scroll;
+}
+.userinput{
+    float: right;
+    clear: both;
+    max-width: 80%;
+    overflow: hidden;
+    padding-top: 10px;
+}
+.assistantreply{
+    float: left;
+    clear: both;
+    overflow: hidden;
+    max-width: 80%;
+    padding-top: 10px;
+}
+form{
+    border-top: 2px solid transparent;
+    border-image: linear-gradient(to right, transparent 0%, #212121 65%, #212121 70%, transparent 100%) 2;
+    width: 100%;
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    background-color: #0D0D0D;
+}
+#userInput{
+    padding-inline: calc(25% - 20px);
+    padding-block: 1px;
+    border: none;
+    border-radius: 10px;
+    background-color: #212121;
+    margin-inline: 10px;
+    font-size: 16px;
+    color: #FFFFFF;
+}
+::-webkit-scrollbar {
+  width: 20px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #d6dee1;
+  border-radius: 20px;
+  border: 6px solid transparent;
+  background-clip: content-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #a8bbbf;
+}
+button{
+   background-color: #1A66FF ; 
+border-radius: 10px;
+border-color: #FFFFFF;
+}
+.assistantreply:first-child {
+    display: none;
+}
+.boxac{
+    display: flex;
+    align-items: center;
+}
+.aci{
+    border-radius: 50%;
+}
+.acc{
+    max-width: 80%;
+    background-color: #1B1B1B;
+    color: #FFFFFF;
+    margin: 8px;
+    padding: 8px;
+    border-radius: 10px;
+}
+.ucc{
+    max-width: 80%;
+    background-color: #1A66FF;
+    color: #FFFFFF;
+    margin: 8px;
+    padding: 8px;
+    border-radius: 10px;
+}
+.sss{
+    margin: 5px;
+    padding: 5px;
+}
+</style>
+<!-- index.html -->
+
+<body>
+    <div class="mbox">
+        <div class="hbox">
+            <h1>SMIU SmartTalk</h1>
+        </div>
+       <!-- Add an id to the container of assistant replies -->
+<div class="cbox" id="assistantReplies">
+    {% for message in messages %}
+        {% if message.role == "user" %}
+            <div class="userinput">
+                <div class="boxac">
+                    <p class="ucc">{{ message.content }}</p>
+                    <img class="aci" src="https://png.pngtree.com/png-clipart/20190520/original/pngtree-vector-users-icon-png-image_4144740.jpg" alt="" width="60" height="60">
+                </div>
+            </div>
+        {% else %}
+        
+            <div class="assistantreply">
+                <div class="boxac">
+                    <img class="aci" src="https://www.smiu.edu.pk/themes/smiu/images/13254460_710745915734761_8157428650049174152_n.png" alt="" width="60" height="60">
+                    <p class="acc">{{ message.content }}</p>
+                </div>
+            </div>
+        {% endif %}
+    {% endfor %}
+</div>
+
+       <!-- Add this button for voice input -->
+<div class="mmbox">
+    <form action="/chat" method="post">
+        <input type="text" id="userInput" name="message" placeholder="Enter Prompt..." required>
+        <button type="submit" class="sss"><img width="30" height="30" color="white" src="https://img.icons8.com/ios-glyphs/30/000000/filled-sent.png" alt="filled-sent"/></button>
+        <button type="button" onclick="startVoiceInput()"  class="sss"><img width="30" height="30" src="https://img.icons8.com/ios/50/000000/microphone.png" alt="microphone"/></button>
+    </form>
+</div>
+
+    </div>
+<!-- Add this script for text-to-speech -->
+<script>
+    function submitForm(event) {
+        event.preventDefault();
+    }
+
+    // Function to read the last assistant reply
+    function readLastAssistantReply() {
+        var assistantRepliesContainer = document.getElementById('assistantReplies');
+        var assistantReplies = assistantRepliesContainer.querySelectorAll('.assistantreply p');
+
+        // Get the last assistant reply
+        var lastReply = assistantReplies[assistantReplies.length - 1];
+
+        if (lastReply) {
+            var utterance = new SpeechSynthesisUtterance(lastReply.textContent);
+            window.speechSynthesis.speak(utterance);
+        }
+    }
+
+    // Trigger reading when the page is loaded
+    window.onload = function () {
+        readLastAssistantReply();
+    };
+
+      // Function to start voice input
+      function startVoiceInput() {
+        var recognition = new webkitSpeechRecognition();
+        recognition.continuous = false;
+        recognition.interimResults = false;
+
+        recognition.start();
+
+        recognition.onresult = function (event) {
+            var result = event.results[0][0].transcript;
+            console.log("Voice input recognized:", result);
+            document.getElementById('userInput').value = result;
+            recognition.stop();
+        };
+
+        recognition.onerror = function (event) {
+            console.error('Speech recognition error:', event.error);
+            recognition.stop();
+        };
+
+        recognition.onend = function () {
+            console.log('Voice recognition ended.');
+        };
+    }
+</script>
+</body>
+
+</html>
